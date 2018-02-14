@@ -62,7 +62,11 @@
                     <div class="alert alert-dismissible alert-info">
                         <button type="button" class="close" data-dismiss="alert">×</button>
                         <strong>You are eligible for our new rewards program!</strong><br>
-                        Attend the premium webinar of your choice absolutely free!  Earn points by sharing our training webinars with others, <a href="{{ URL::route('client.loyalty.index') }}">click here for more information!</a>
+                        Attend the premium webinar of your choice absolutely free!
+                        Earn points by sharing our training webinars with others,
+                        <a href="{{ URL::route('client.loyalty.index') }}">
+                            click here for more information!
+                        </a>
                     </div>
                 @endif
                 @if($userWithUpcoming && false)
@@ -95,7 +99,10 @@
                     @else
                         <p class="lead text-center">
                             You do not have any items in your library yet!<br>
-                            To get started, take a look at some of our <strong><a href="<?=URL::route('client.products.free-webinars')?>">free training courses</a></strong>
+                            To get started, take a look at some of our
+                            <strong>
+                                <a href="<?=URL::route('client.products.free-webinars')?>">free training courses</a>
+                            </strong>
                             you can add to your library!
                         </p>
                     @endif

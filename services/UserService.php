@@ -130,12 +130,22 @@ class UserService {
             $ifsInvoice = $infusionsoftService->infusionsoft->Invoice->findByJobId($ifsOrder->Id);
             $currentUser = $sessionService->getActiveUser();
         } catch (\Infusionsoft_Exception $e) {
-            $this->debugger->sendCriticalNotification('User Purchase Action', array_only(get_defined_vars(), ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice']), $e);
+            $this->debugger->sendCriticalNotification(
+                'User Purchase Action',
+                array_only(get_defined_vars(),
+                ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice']),
+                $e);
+
             throw new Exception("Problem when loading order information.  Please contact support with the following information: Contact ID #$ifsContactId, Order ID #$ifsOrderId.  Sorry for the inconvenience!");
         }
 
         if (!$ifsContact || !$ifsOrder || !$ifsInvoice || $ifsOrder->ContactId != $ifsContact->Id) {
-            $this->debugger->sendCriticalNotification('User Purchase Action: Step 2', array_only(get_defined_vars(), ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice']));
+            $this->debugger->sendCriticalNotification(
+                'User Purchase Action: Step 2',
+                array_only(get_defined_vars(),
+                ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice']
+            ));
+
             throw new Exception('Unable to find CRM order');
         }
         if(!empty($currentUser->infusionsoft_contact_id)){
@@ -155,11 +165,11 @@ class UserService {
         $tomorrow = Carbon::tomorrow();
         $LeadSource = \Config::get('services.infusionsoft.app_name').'.infusionsoft.com/app/manageCart/showManageOrder';
         if(empty($ifsContact->_LeadSourceGoogleAnalytics) && Carbon::parse($ifsContact->DateCreated)->between($today,$tomorrow)){
-            
+
             $ifsContact->_LeadSourceGoogleAnalytics = $gALeadSource;
             $ifsContact->Leadsource = $LeadSource;
             //review leadsource capture page
-            
+
             if(!empty($gALeadSource)){
                 $infusionsoftService->infusionsoft->Contact->addOrUpdate([
                     'Id' => $ifsContact->Id,
@@ -178,7 +188,12 @@ class UserService {
 
         $orderItems = $infusionsoftService->infusionsoft->OrderService->getOrderItems($ifsOrder->Id);
         if (empty($orderItems)) {
-            $this->debugger->sendCriticalNotification('User Purchase Action: No Order Items', array_only(get_defined_vars(), ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice', 'orderItems']));
+            $this->debugger->sendCriticalNotification(
+                'User Purchase Action: No Order Items',
+                array_only(get_defined_vars(),
+                ['ifsContactId', 'ifsOrderId', 'ifsContact', 'ifsOrder', 'ifsInvoice', 'orderItems']
+            ));
+
             throw new Exception('Order does not have any items');
         }
 
@@ -1033,9 +1048,9 @@ class UserService {
             return false;
          }
     }
-    
+
     public function setRegistrantInfoToUserByEmail($email, $registrantInfo, $orderItem)
-    {   
+    {
         $user = $this->userRepository->findByEmail($email);
         $variation = $this->userVariationRepository->model->where('webinar_api_join_url', $registrantInfo['joinUrl'])->first();
         if (!$variation) {
